@@ -16,6 +16,5 @@ A personal job application tracking web app built with:
 - SQLite (bundled automatically)
 
 
-## TO Start 
+## To Start 
 - Clone Repo -> dotnet build -> dotnet run
-- 
