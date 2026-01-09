@@ -14,3 +14,8 @@ A personal job application tracking web app built with:
 ## Requirements
 - .NET 8 or newer
 - SQLite (bundled automatically)
+
+
+## TO Start 
+- Clone Repo -> dotnet build -> dotnet run
+- 
