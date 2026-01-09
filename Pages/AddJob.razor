@@ -1,0 +1,150 @@
+@page "/add-job"
+
+
+
+
+<PageTitle>Add New Application</PageTitle>
+
+<div class="container">
+    <section class="header-section d-flex align-items-center">
+        <button class="btn text-dark fs-1" onclick="@GoToIndexPage"><i class="fa-solid fa-caret-left"></i></button>
+        <h1 class="title fw-bold text-dark fs-2">Add New Application</h1>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+            <EditForm Model="@newJob" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+            
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="companyName">Company Name</label>
+                        <InputText id="companyName" class="form-control" @bind-Value="newJob.CompanyName" placeholder=" ... " />
+                        <ValidationMessage For="@(() => newJob.CompanyName)" />
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="logoLink">Company Logo Link</label>
+                        <InputText id="logoLink" class="form-control" @bind-Value="newJob.LogoImgLink" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.LogoImgLink)" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="position">Position</label>
+                        <InputText id="position" class="form-control" @bind-Value="newJob.Position" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.Position)" />
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="role">Role</label>
+                        <InputText id="role" class="form-control" @bind-Value="newJob.Role" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.Role)" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="status">Status</label>
+                        <select id = "status" class="form-control" @bind="newJob.CurrentStatus">
+                            @foreach (var value in Enum.GetValues<StatusList>())
+                            {
+                                <option value="@value">@value</option>
+                            }
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="action">Next Action</label>
+                         <select id = "action" class="form-control" @bind="newJob.NextAction">
+                            @foreach (var value in Enum.GetValues<NextActionList>())
+                            {
+                                <option value="@value">@value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="label" for="location">Location</label>
+                    <InputText id="location" class="form-control" @bind-Value="newJob.Location" placeholder=" ... "/>
+                    <ValidationMessage For="@(() => newJob.Location)" />
+                </div>
+
+
+
+                <div class="form-group ">
+                    <label class="label" for="dateApplied">DateApplied</label>
+                    <input id="dateApplied" type="date" class="form-control" @bind="newJob.DateApplied" placeholder=" ... "/>
+                    <ValidationMessage For="@(() => newJob.DateApplied)" />
+                </div>
+
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-4">
+                        <label class="label" for="name">Contact Name </label>
+                        <InputText id="name" class="form-control" @bind-Value="newJob.Name" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.Name)" />
+                    </div>
+
+
+                    <div class="form-group mb-3 col-4">
+                        <label class="label" for="email">Email</label>
+                        <InputText id="email" class="form-control" @bind-Value="newJob.Email" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.Email)" />
+                    </div>
+
+                    <div class="form-group mb-3 col-4">
+                        <label class="label" for="number">Number</label>
+                        <InputText id="number" class="form-control" @bind-Value="newJob.Number" placeholder=" ... "/>
+                        <ValidationMessage For="@(() => newJob.Number)" />
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 ">
+                    <label class="label" for="link">Website Link</label>
+                    <InputText id="link" class="form-control" @bind-Value="newJob.Link" placeholder=" ... "/>
+                    <ValidationMessage For="@(() => newJob.Link)" />
+                </div>
+
+
+                <div class="form-group mb-3 ">
+                    <label class="label" for="appliedLink">Applied Link</label>
+                    <InputText id="appliedLink" class="form-control" @bind-Value="newJob.AppliedLink" placeholder=" ... "/>
+                    <ValidationMessage For="@(() => newJob.AppliedLink)" />
+                </div>
+
+                <button class="submit-btn btn btn-dark mt-2 mb-5 fs-5 fw-bold w-100" type="submit">Save</button>
+            </EditForm> 
+        </div>
+    </section>
+
+</div>
+
+
+
+
+
+
+@code {
+    JobApplication newJob = new JobApplication();
+
+    private async Task HandleValidSubmit()
+    {
+        await JobService.AddAsync(newJob);
+        Navigation.NavigateTo("/");
+    }
+
+    public void GoToIndexPage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+
+}

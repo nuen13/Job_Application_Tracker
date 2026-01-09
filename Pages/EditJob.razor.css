@@ -1,0 +1,23 @@
+
+.container .header-section{
+    margin-top:70px
+}
+
+
+.form-section .form-container{
+    margin-top: 50px;
+    margin-left:30px
+}
+
+
+.form-section .label{
+    font-weight: 500;
+    font-size: 18px;
+    color: black;
+
+    margin-bottom: 5px;
+}
+
+.form-section .form-group{
+    margin-bottom: 25px;
+}

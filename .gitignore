@@ -1,0 +1,21 @@
+# .NET
+bin/
+obj/
+
+# Visual Studio / Rider / VSCode
+.vs/
+.idea/
+.vscode/
+
+# SQLite databases (PRIVATE DATA)
+*.db
+*.db-shm
+*.db-wal
+
+# Environment / secrets
+.env
+appsettings.Development.json
+
+# OS files
+.DS_Store
+Thumbs.db

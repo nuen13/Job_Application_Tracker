@@ -1,0 +1,85 @@
+﻿@page "/"
+
+@inject NavigationManager Navigation
+@inject JobApplicationService JobService
+
+<PageTitle>Job Application Tracker</PageTitle>
+
+<div class="container">
+    <section class="app-title-section d-flex justify-content-between align-items-center">
+        <div class="title-container">
+            <h1 class="title fw-bold text-dark display-5">Job Application Tracker</h1>
+            <p class="subtitle fw-lighter fs-5 text-secondary">
+                Track and manage your job applications
+            </p>
+        </div>
+
+        <button class="add-btn btn btn-dark fw-bold fs-5" @onclick="GoToAddPage">
+            <i class="fa fa-plus me-2"></i>
+            Add Application
+        </button>
+    </section>
+
+    <section class="job-apps-section mt-4">
+        @if (jobs.Count == 0)
+        {
+            <p class="text-muted">No job applications yet.</p>
+        }
+        else
+        {
+            @foreach (var job in jobs)
+            {
+                <JobBoard Job="job" OnStatusChanged="UpdateStatusAsync" OnNextActionChanged = "UpdateNextActionAsync" OnDelete = "DeleteApplicationAsync"/>
+            }
+        }
+    </section>
+</div>
+
+@code {
+    private List<JobApplication> jobs = new();
+
+
+    // Navigation
+
+    void GoToAddPage()
+    {
+        Navigation.NavigateTo("/add-job");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            jobs = await JobService.GetAllAsync();
+            Console.WriteLine($"JOB COUNT: {jobs.Count}");
+            StateHasChanged();
+        }
+    }
+
+
+    // Update Status
+
+    private async Task UpdateStatusAsync(JobApplication job)
+    {
+        await JobService.UpdateAsync(job);
+
+        jobs = await JobService.GetAllAsync();
+    }
+
+
+    // Update Next Action
+
+    private async Task UpdateNextActionAsync(JobApplication job){
+        await JobService.UpdateAsync(job);
+        jobs = await JobService.GetAllAsync(); 
+    }
+
+
+    // Delete -> update db
+    private async Task DeleteApplicationAsync(Guid id)
+    {
+        await JobService.DeleteAsync(id);
+        jobs = await JobService.GetAllAsync();
+    }
+
+}

@@ -1,0 +1,174 @@
+@page "/edit-job/{id:guid}"
+
+@inject JobApplicationService JobService
+@inject NavigationManager Navigation
+
+
+<PageTitle>Edit Application</PageTitle>
+
+
+<div class="container mt-5">
+    <section class="header-section d-flex">
+        <button class="btn text-dark fs-1 my-auto" @onclick="GoToIndexPage"><i
+                class="fa-solid fa-caret-left"></i></button>
+        <h1 class="title fw-bold text-dark fs-2 my-auto">Edit Application</h1>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+            <EditForm Model="@Job" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="companyName">Company Name</label>
+                        <InputText id="companyName" class="form-control" @bind-Value="Job.CompanyName"
+                            placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.CompanyName)" />
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="logoLink">Company Logo Link</label>
+                        <InputText id="logoLink" class="form-control" @bind-Value="Job.LogoImgLink"
+                            placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.LogoImgLink)" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="position">Position</label>
+                        <InputText id="position" class="form-control" @bind-Value="Job.Position" placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.Position)" />
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="role">Role</label>
+                        <InputText id="role" class="form-control" @bind-Value="Job.Role" placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.Role)" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6">
+                        <label class="label" for="status">Status</label>
+                        <select id="status" class="form-control" @bind="Job.CurrentStatus">
+                            @foreach (var value in Enum.GetValues<StatusList>())
+                            {
+                                <option value="@value">@value</option>
+                            }
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-6">
+                        <label class="label" for="action">Next Action</label>
+                        <select id="action" class="form-control" @bind="Job.NextAction">
+                            @foreach (var value in Enum.GetValues<NextActionList>())
+                            {
+                                <option value="@value">@value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="label" for="location">Location</label>
+                    <InputText id="location" class="form-control" @bind-Value="Job.Location" placeholder=" ... " />
+                    <ValidationMessage For="@(() => Job.Location)" />
+                </div>
+
+
+
+                <div class="form-group ">
+                    <label class="label" for="dateApplied">DateApplied</label>
+                    <input id="dateApplied" type="date" class="form-control" @bind="Job.DateApplied"
+                        placeholder=" ... " />
+                    <ValidationMessage For="@(() => Job.DateApplied)" />
+                </div>
+
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-4">
+                        <label class="label" for="name">Contact Name </label>
+                        <InputText id="name" class="form-control" @bind-Value="Job.Name" placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.Name)" />
+                    </div>
+
+
+                    <div class="form-group mb-3 col-4">
+                        <label class="label" for="email">Email</label>
+                        <InputText id="email" class="form-control" @bind-Value="Job.Email" placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.Email)" />
+                    </div>
+
+                    <div class="form-group mb-3 col-4">
+                        <label class="label" for="number">Number</label>
+                        <InputText id="number" class="form-control" @bind-Value="Job.Number" placeholder=" ... " />
+                        <ValidationMessage For="@(() => Job.Number)" />
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 ">
+                    <label class="label" for="link">Website Link</label>
+                    <InputText id="link" class="form-control" @bind-Value="Job.Link" placeholder=" ... " />
+                    <ValidationMessage For="@(() => Job.Link)" />
+                </div>
+
+
+                <div class="form-group mb-3 ">
+                    <label class="label" for="appliedLink">Applied Link</label>
+                    <InputText id="appliedLink" class="form-control" @bind-Value="Job.AppliedLink"
+                        placeholder=" ... " />
+                    <ValidationMessage For="@(() => Job.AppliedLink)" />
+                </div>
+                <button class="submit-btn btn btn-dark mt-2 mb-5 fs-5 fw-bold w-100" type="submit">Save</button>
+            </EditForm>
+
+        </div>
+    </section>
+</div>
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public Guid id { get; set; }
+
+    [Parameter, EditorRequired]
+    public JobApplication Job { get; set; } = default!;
+
+
+    // Navigation
+    public void GoToIndexPage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await JobService.UpdateAsync(Job);
+        Navigation.NavigateTo("/");
+    }
+
+
+    // logic
+    protected override async Task OnInitializedAsync()
+    {
+        var jobFromDb = await JobService.GetByIdAsync(id);
+
+        if (jobFromDb == null)
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        Job = jobFromDb;
+    }
+
+}
