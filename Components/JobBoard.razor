@@ -140,6 +140,7 @@
         if (Enum.TryParse<StatusList>(newStatus, out var status))
         {
             Job.CurrentStatus = status;
+            Job.DateUpdate = DateTime.Now;
             await OnStatusChanged.InvokeAsync(Job);
         }
     }
@@ -166,6 +167,7 @@
         if (Enum.TryParse<NextActionList>(newNextAction, out var action))
         {
             Job.NextAction = action;
+            Job.DateUpdate = DateTime.Now;
             await OnNextActionChanged.InvokeAsync(Job);
         }
     }
